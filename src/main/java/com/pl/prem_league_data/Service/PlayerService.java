@@ -1,7 +1,10 @@
 package com.pl.prem_league_data.Service;
 
 import com.pl.prem_league_data.PlayerEntity.Player;
+import com.pl.prem_league_data.PlayerEntity.Position;
 import com.pl.prem_league_data.Repository.PlayerRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,11 +16,13 @@ public class PlayerService {
         this.playerRepository = playerRepository;
     }
 
-    public List<Player> getAllPlayers(){
-        return playerRepository.findAll();
-    }
-
-    public List<Player> getAllPlayersSortedByGoals(){
-        return playerRepository.sortByGoalsDesc();
+    public Page<Player> searchRepository(String name, Position position, Pageable pageable) {
+        if(position != null) {
+            return playerRepository.findByPosition(position, pageable);
+        } else if(name != null) {
+            return playerRepository.findByNameContainingIgnoreCase(name, pageable);
+        }
+        else
+            return playerRepository.findAll(pageable);
     }
 }
