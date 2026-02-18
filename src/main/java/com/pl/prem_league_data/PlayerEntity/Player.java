@@ -146,9 +146,8 @@ public class Player {
         this.xA = xA;
     }
 
-    public Player(Integer id, Integer externalId, String name, Position position, String team, String nationality, Integer minutes, Integer goals, Integer assists, Integer totalPoints, BigDecimal price, BigDecimal xg, BigDecimal xA) {
+    public Player(Integer id,String name, Position position, String team, String nationality, Integer minutes, Integer goals, Integer assists, Integer totalPoints, BigDecimal price, BigDecimal xg, BigDecimal xA) {
         this.id = id;
-        this.externalId = externalId;
         this.name = name;
         this.position = position;
         this.team = team;
