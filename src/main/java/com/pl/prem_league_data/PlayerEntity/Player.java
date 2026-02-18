@@ -7,20 +7,18 @@ import java.math.BigDecimal;
 @Entity
 @Table(
         name = "players",
-        indexes = {
-                @Index(name = "idx_players_team", columnList = "team"),
-                @Index(name = "idx_players_position", columnList = "position"),
-                @Index(name = "idx_players_name", columnList = "name")
-        } // optimizes queries filtering by team, position, or name
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_player_name_position", columnNames = {"name", "position"})
+        }
 )
 public class Player {
 
     //--------------- Identifiers ---------------
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     @Column(unique = true)
-    private Integer externalId;
+    private Long externalId;
 
     //--------------- Personal Info ---------------
     @Column(nullable = false)
@@ -28,9 +26,6 @@ public class Player {
     @Enumerated(EnumType.STRING) // stores enum as string for readability and flexibility
     @Column(nullable = false)
     private Position position;
-    @Column(nullable = false)
-    private String team;
-    private String nationality;
 
     // -------------- Stats --------------
     private Integer minutes;
@@ -42,19 +37,22 @@ public class Player {
     @Column(precision = 5, scale = 2)
     private BigDecimal price;
 
-    public Integer getId() {
+    public Player() {
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Integer getExternalId() {
+    public Long getExternalId() {
         return externalId;
     }
 
-    public void setExternalId(Integer externalId) {
+    public void setExternalId(Long externalId) {
         this.externalId = externalId;
     }
 
@@ -72,22 +70,6 @@ public class Player {
 
     public void setPosition(Position position) {
         this.position = position;
-    }
-
-    public String getTeam() {
-        return team;
-    }
-
-    public void setTeam(String team) {
-        this.team = team;
-    }
-
-    public String getNationality() {
-        return nationality;
-    }
-
-    public void setNationality(String nationality) {
-        this.nationality = nationality;
     }
 
     public Integer getMinutes() {
@@ -130,42 +112,15 @@ public class Player {
         this.price = price;
     }
 
-    public BigDecimal getXg() {
-        return xg;
-    }
-
-    public void setXg(BigDecimal xg) {
-        this.xg = xg;
-    }
-
-    public BigDecimal getxA() {
-        return xA;
-    }
-
-    public void setxA(BigDecimal xA) {
-        this.xA = xA;
-    }
-
-    public Player(Integer id,String name, Position position, String team, String nationality, Integer minutes, Integer goals, Integer assists, Integer totalPoints, BigDecimal price, BigDecimal xg, BigDecimal xA) {
-        this.id = id;
+    public Player(String name, Position position,
+                  Integer minutes, Integer goals, Integer assists,
+                  Integer totalPoints, BigDecimal price) {
         this.name = name;
         this.position = position;
-        this.team = team;
-        this.nationality = nationality;
         this.minutes = minutes;
         this.goals = goals;
         this.assists = assists;
         this.totalPoints = totalPoints;
         this.price = price;
-        this.xg = xg;
-        this.xA = xA;
     }
-
-    public Player() {
-    }
-
-    @Column(precision = 5, scale = 2)
-    private BigDecimal xg;
-    @Column(precision = 5, scale = 2)
-    private BigDecimal xA;
 }
