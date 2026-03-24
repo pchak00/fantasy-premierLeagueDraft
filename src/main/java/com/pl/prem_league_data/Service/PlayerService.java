@@ -1,13 +1,12 @@
 package com.pl.prem_league_data.Service;
 
-import com.pl.prem_league_data.PlayerEntity.Player;
-import com.pl.prem_league_data.PlayerEntity.Position;
+import com.pl.prem_league_data.Entity.Player;
+import com.pl.prem_league_data.Entity.Position;
 import com.pl.prem_league_data.Repository.PlayerRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 public class PlayerService {

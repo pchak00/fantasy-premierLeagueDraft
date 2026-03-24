@@ -1,4 +1,4 @@
-package com.pl.prem_league_data.PlayerEntity;
+package com.pl.prem_league_data.Entity;
 
 public enum Position {
     GK,

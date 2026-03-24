@@ -1,8 +1,10 @@
-package com.pl.prem_league_data.PlayerEntity;
+package com.pl.prem_league_data.Entity;
 
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(
@@ -17,9 +19,6 @@ public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true)
-    private Long externalId;
-
     //--------------- Personal Info ---------------
     @Column(nullable = false)
     private String name;
@@ -39,6 +38,16 @@ public class Player {
 
     public Player() {
     }
+    //-------------Relationships----------------
+    @OneToMany(mappedBy = "player")
+    List<PlayerTeam> playerTeams = new ArrayList<>();
+    public List<PlayerTeam> getPlayerTeams() {
+        return playerTeams;
+    }
+
+    public void setPlayerTeams(List<PlayerTeam> playerTeams) {
+        this.playerTeams = playerTeams;
+    }
 
     public Long getId() {
         return id;
@@ -48,13 +57,6 @@ public class Player {
         this.id = id;
     }
 
-    public Long getExternalId() {
-        return externalId;
-    }
-
-    public void setExternalId(Long externalId) {
-        this.externalId = externalId;
-    }
 
     public String getName() {
         return name;

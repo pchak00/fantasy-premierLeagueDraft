@@ -1,7 +1,7 @@
 
 package com.pl.prem_league_data.Repository;
-import com.pl.prem_league_data.PlayerEntity.Player;
-import com.pl.prem_league_data.PlayerEntity.Position;
+import com.pl.prem_league_data.Entity.Player;
+import com.pl.prem_league_data.Entity.Position;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,8 +15,8 @@ public interface PlayerRepository extends JpaRepository<Player, Integer> {
     @Override
     public Page<Player> findAll(Pageable pageable);
 
-    @Query(value = "SELECT * FROM players ORDER BY goals DESC", nativeQuery = true)
-    List<Player> sortByGoalsDesc();
+    @Query(value = "SELECT * FROM players where team =${team}", nativeQuery = true)
+    List<Player> searchByTeam(String team);
 
     Page<Player> findByPosition(Position position, Pageable pageable);
     Page<Player> findByNameContainingIgnoreCase(String name, Pageable pageable);

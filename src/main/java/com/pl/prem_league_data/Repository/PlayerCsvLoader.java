@@ -1,6 +1,6 @@
 package com.pl.prem_league_data.Repository;
-import com.pl.prem_league_data.PlayerEntity.Player;
-import com.pl.prem_league_data.PlayerEntity.Position;
+import com.pl.prem_league_data.Entity.Player;
+import com.pl.prem_league_data.Entity.Position;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
