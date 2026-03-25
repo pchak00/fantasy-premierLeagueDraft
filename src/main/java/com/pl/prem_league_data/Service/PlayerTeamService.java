@@ -4,6 +4,10 @@ import com.pl.prem_league_data.DTO.PlayerSummaryDto;
 import com.pl.prem_league_data.Entity.DraftTeam;
 import com.pl.prem_league_data.Entity.Player;
 import com.pl.prem_league_data.Entity.PlayerTeam;
+import com.pl.prem_league_data.Exceptions.DuplicatePlayerException;
+import com.pl.prem_league_data.Exceptions.TeamBudgetOutOfBoundException;
+import com.pl.prem_league_data.Exceptions.TeamCapacityOutOfBoundException;
+import com.pl.prem_league_data.Exceptions.TeamPositionOutOfBoundException;
 import com.pl.prem_league_data.Repository.DraftTeamRepository;
 import com.pl.prem_league_data.Repository.PlayerRepository;
 import com.pl.prem_league_data.Repository.PlayerTeamRepository;
@@ -30,15 +34,27 @@ public class PlayerTeamService {
         List<PlayerTeam> totalPlayersInTeam = playerTeamRepository.findTotalPlayerByTeam(teamId);
         List<PlayerSummaryDto> playerByPosition = playerTeamRepository.playerTeamByPosition(teamId, player.getPosition());
         Boolean positionLimit = draftTeam.positionCap(player.getPosition(), playerByPosition.size()); // return true if adding player of this position to the team is valid
-
         BigDecimal remainingBudget = draftTeam.getBudget().subtract(player.getPrice());
-        if (playerTeams.isEmpty() && totalPlayersInTeam.size() < 15 && positionLimit && remainingBudget.compareTo(BigDecimal.ZERO) >= 0) {
+
+        if(!playerTeams.isEmpty()) {
+            throw new DuplicatePlayerException("Player already exists in team");
+        }
+        if(totalPlayersInTeam.size() >=15 ) {
+            throw new TeamCapacityOutOfBoundException("Team capacity is full");
+        }
+        if(!positionLimit) {
+            throw new TeamPositionOutOfBoundException("Team already has maximum number of players in this position");
+        }
+        if(remainingBudget.compareTo(BigDecimal.ZERO) < 0) {
+            throw new TeamBudgetOutOfBoundException("Team budget is not sufficient to add this player");
+        }
+
             PlayerTeam playerTeam = new PlayerTeam();
             playerTeam.setPlayer(player);
             playerTeam.setTeam(draftTeam);
             draftTeam.setBudget(remainingBudget);
             draftTeamRepository.save(draftTeam);
             playerTeamRepository.save(playerTeam);
-        }
+
     }
 }

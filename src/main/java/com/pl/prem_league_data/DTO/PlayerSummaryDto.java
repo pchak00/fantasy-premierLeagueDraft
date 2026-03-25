@@ -1,11 +1,13 @@
 package com.pl.prem_league_data.DTO;
 
+import com.pl.prem_league_data.Entity.Position;
+
 public class PlayerSummaryDto {
     private Long id;
     private String name;
-    private String position;
+    private Position position;
 
-    public PlayerSummaryDto(Long id, String name, String position) {
+    public PlayerSummaryDto(Long id, String name, Position position) {
         this.id = id;
         this.name = name;
         this.position = position;
@@ -30,11 +32,11 @@ public class PlayerSummaryDto {
         this.name = name;
     }
 
-    public String getPosition() {
+    public Position getPosition() {
         return position;
     }
 
-    public void setPosition(String position) {
+    public void setPosition(Position position) {
         this.position = position;
     }
 }
