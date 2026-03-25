@@ -34,6 +34,7 @@ public class PlayerTeam {
 
     public PlayerTeam() {
     }
+    
 
     @ManyToOne
     @JoinColumn(name = "player_id")

@@ -2,6 +2,7 @@ package com.pl.prem_league_data.Entity;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 @Entity
@@ -10,9 +11,9 @@ public class DraftTeam {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private double budget;
+    private BigDecimal budget;
 
-    public DraftTeam(Long id, String name, double budget) {
+    public DraftTeam(Long id, String name, BigDecimal budget) {
         this.id = id;
         this.name = name;
         this.budget = budget;
@@ -56,11 +57,20 @@ public class DraftTeam {
         this.name = name;
     }
 
-    public double getBudget() {
+    public BigDecimal getBudget() {
         return budget;
     }
 
-    public void setBudget(double budget) {
+    public void setBudget(BigDecimal budget) {
         this.budget = budget;
+    }
+
+    // helper method to check if the team has reached the position cap for a given position
+    public Boolean positionCap(Position position, int size) {
+        if(position == Position.GK && size < 2) return true;
+        if(position == Position.DEF && size < 5) return true;
+        if(position == Position.MID && size < 5) return true;
+        if(position == Position.FWD && size < 3) return true;
+        return false;
     }
 }
