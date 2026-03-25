@@ -73,4 +73,11 @@ public class DraftTeam {
         if(position == Position.FWD && size < 3) return true;
         return false;
     }
+
+    public void removePlayerTeam(PlayerTeam playerTeam) {
+        playerTeams.remove(playerTeam);
+    }
+    public void addPlayerTeam(PlayerTeam playerTeam) {
+        playerTeams.add(playerTeam);
+    }
 }

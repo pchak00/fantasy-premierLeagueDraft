@@ -4,13 +4,11 @@ import com.pl.prem_league_data.DTO.PlayerSummaryDto;
 import com.pl.prem_league_data.Entity.DraftTeam;
 import com.pl.prem_league_data.Entity.Player;
 import com.pl.prem_league_data.Entity.PlayerTeam;
-import com.pl.prem_league_data.Exceptions.DuplicatePlayerException;
-import com.pl.prem_league_data.Exceptions.TeamBudgetOutOfBoundException;
-import com.pl.prem_league_data.Exceptions.TeamCapacityOutOfBoundException;
-import com.pl.prem_league_data.Exceptions.TeamPositionOutOfBoundException;
+import com.pl.prem_league_data.Exceptions.*;
 import com.pl.prem_league_data.Repository.DraftTeamRepository;
 import com.pl.prem_league_data.Repository.PlayerRepository;
 import com.pl.prem_league_data.Repository.PlayerTeamRepository;
+import jakarta.transaction.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -26,14 +24,15 @@ public class PlayerTeamService {
         this.playerTeamRepository = playerTeamRepository;
     }
 
-    public void addPlayerToDraftTeam(Player player, DraftTeam draftTeam) {
-        Long playerId = player.getId();
-        Long teamId = draftTeam.getId();
+    @Transactional
+    public void addPlayerToDraftTeam(long playerId, long teamId) {
+        Player player = playerRepository.findById(playerId).orElseThrow(() -> new PlayerNotFoundException("Player not found"));
+        DraftTeam draftTeam = draftTeamRepository.findById(teamId).orElseThrow(() -> new TeamNotFoundException("Team not found"));
 
         List<PlayerTeam> playerTeams = playerTeamRepository.playerInTeam(playerId, teamId);
         List<PlayerTeam> totalPlayersInTeam = playerTeamRepository.findTotalPlayerByTeam(teamId);
         List<PlayerSummaryDto> playerByPosition = playerTeamRepository.playerTeamByPosition(teamId, player.getPosition());
-        Boolean positionLimit = draftTeam.positionCap(player.getPosition(), playerByPosition.size()); // return true if adding player of this position to the team is valid
+        boolean positionLimit = draftTeam.positionCap(player.getPosition(), playerByPosition.size()); // return true if adding player of this position to the team is valid
         BigDecimal remainingBudget = draftTeam.getBudget().subtract(player.getPrice());
 
         if(!playerTeams.isEmpty()) {
@@ -52,9 +51,27 @@ public class PlayerTeamService {
             PlayerTeam playerTeam = new PlayerTeam();
             playerTeam.setPlayer(player);
             playerTeam.setTeam(draftTeam);
+
+            player.addPlayerTeam(playerTeam);
+            draftTeam.addPlayerTeam(playerTeam);
             draftTeam.setBudget(remainingBudget);
-            draftTeamRepository.save(draftTeam);
+
             playerTeamRepository.save(playerTeam);
+
+    }
+    @Transactional
+    public void removePlayer(long playerId, long teamId) {
+        Player player = playerRepository.findById(playerId).orElseThrow(() -> new PlayerNotFoundException("Player not found"));
+        DraftTeam draftTeam = draftTeamRepository.findById(teamId).orElseThrow(() -> new TeamNotFoundException("Team not found"));
+        PlayerTeam playerTeam = playerTeamRepository.findPlayerInTeam(player.getId(), draftTeam.getId());
+        if(playerTeam == null) { throw new PlayerNotInTeamException("Player not found in team"); // nothing to remove
+        }
+        BigDecimal newBudget = draftTeam.getBudget().add(player.getPrice());
+        draftTeam.setBudget(newBudget); // updating remaining budget of the team after removing the player
+
+        playerTeamRepository.delete(playerTeam);
+        player.removePlayerTeam(playerTeam);
+        draftTeam.removePlayerTeam(playerTeam);
 
     }
 }

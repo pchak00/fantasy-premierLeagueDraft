@@ -18,4 +18,7 @@ public interface PlayerTeamRepository extends JpaRepository<PlayerTeam, Long> {
 
     @Query("Select new com.pl.prem_league_data.DTO.PlayerSummaryDto(pt.player.id, pt.player.name, pt.player.position) from PlayerTeam pt where pt.team.id = :teamId and pt.player.position = :position")
     public List<PlayerSummaryDto> playerTeamByPosition(Long teamId, Position position);
+
+    @Query("Select pt from PlayerTeam pt where pt.player.id = :playerId and pt.team.id = :teamId")
+    public PlayerTeam findPlayerInTeam(Long playerId, Long teamId);
 }

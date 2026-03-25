@@ -45,6 +45,13 @@ public class Player {
         return playerTeams;
     }
 
+    public void removePlayerTeam(PlayerTeam playerTeam) {
+        this.playerTeams.remove(playerTeam);
+    }
+    public void addPlayerTeam(PlayerTeam playerTeam) {
+        this.playerTeams.add(playerTeam);
+    }
+
     public void setPlayerTeams(List<PlayerTeam> playerTeams) {
         this.playerTeams = playerTeams;
     }
