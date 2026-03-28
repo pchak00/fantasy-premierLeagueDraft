@@ -1,5 +1,6 @@
 package com.pl.prem_league_data.Service;
 
+import com.pl.prem_league_data.DTO.DraftTeamSummaryDto;
 import com.pl.prem_league_data.DTO.PlayerSummaryDto;
 import com.pl.prem_league_data.Entity.DraftTeam;
 import com.pl.prem_league_data.Entity.Player;
@@ -73,5 +74,23 @@ public class PlayerTeamService {
         player.removePlayerTeam(playerTeam);
         draftTeam.removePlayerTeam(playerTeam);
 
+    }
+    @Transactional
+    public DraftTeamSummaryDto getDraftTeamByTeamId(long teamId) {
+
+        DraftTeam draftTeam = draftTeamRepository.findById(teamId).orElseThrow(() -> new TeamNotFoundException("Team not found"));
+        DraftTeamSummaryDto draftTeamSummaryDto = new DraftTeamSummaryDto();
+        draftTeamSummaryDto.setId(draftTeam.getId());
+        draftTeamSummaryDto.setName(draftTeam.getName());
+        draftTeamSummaryDto.setBudget(draftTeam.getBudget());
+
+        List<PlayerTeam> playerTeams = draftTeam.getPlayerTeams();
+        draftTeamSummaryDto.setTotalPlayers(playerTeams.size());
+        for(PlayerTeam playerTeam : playerTeams) {
+            Player player = playerTeam.getPlayer();
+            PlayerSummaryDto playerSummaryDto = new PlayerSummaryDto(player.getId(), player.getName(), player.getPosition());
+            draftTeamSummaryDto.addPlayerDto(playerSummaryDto);
+        }
+        return draftTeamSummaryDto;
     }
 }
