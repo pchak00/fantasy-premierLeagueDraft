@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+
 @RestController
 public class PlayerController {
     PlayerService playerService;
@@ -21,6 +23,9 @@ public class PlayerController {
     @GetMapping("/players")
     Page<Player> getAllPlayers(@RequestParam(required = false) String name,
                                @RequestParam(required = false) Position position,
+                               @RequestParam(required = false) BigDecimal minPrice,
+                               @RequestParam(required = false) BigDecimal maxPrice,
+                               @RequestParam(required = false) Integer minTotalPoints,
                                @PageableDefault(
                                        page = 0,
                                        size = 20,
@@ -28,7 +33,7 @@ public class PlayerController {
                                        direction = Sort.Direction.DESC
                                )Pageable pageable) {
        // Pageable pageable = PageRequest.of(page, size);
-        return playerService.searchRepository(name, position, pageable);
+        return playerService.searchRepository(name, position, minPrice, maxPrice, minTotalPoints, pageable);
     }
 
 }

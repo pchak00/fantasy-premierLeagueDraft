@@ -1,5 +1,6 @@
 package com.pl.prem_league_data.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
@@ -49,6 +50,7 @@ public class Player {
     }
     //-------------Relationships----------------
     @OneToMany(mappedBy = "player")
+    @JsonIgnore
     List<PlayerTeam> playerTeams = new ArrayList<>();
     public List<PlayerTeam> getPlayerTeams() {
         return playerTeams;
