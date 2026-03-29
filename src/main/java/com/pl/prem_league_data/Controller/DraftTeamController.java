@@ -31,7 +31,7 @@ public class DraftTeamController {
          Long playerId = idRequestDto.getId();
         playerTeamService.addPlayerToDraftTeam(playerId, teamId);
     }
-    @PutMapping("/draft-teams/remove/{teamId}")
+    @PutMapping("/draft-teams/removePlayer/{teamId}")
     public void removePlayerFromDraftTeam(@RequestBody IdRequestDto idRequestDto, @PathVariable Long teamId) {
         Long playerId = idRequestDto.getId();
          playerTeamService.removePlayer(playerId, teamId);
@@ -39,5 +39,9 @@ public class DraftTeamController {
      @GetMapping("/draft-teams")
         public List<DraftTeamSummaryDto> getDraftTeams() {
         return playerTeamService.getDraftTeams();
+     }
+     @PutMapping("/draft-teams/removeTeam/{teamId}")
+    public void removeDraftTeam(@PathVariable Long teamId) {
+        playerTeamService.deleteDraftTeam(teamId);
      }
 }

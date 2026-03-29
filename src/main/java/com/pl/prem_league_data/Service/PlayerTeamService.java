@@ -119,5 +119,18 @@ public class PlayerTeamService {
         }
         return draftTeamsSummary;
         }
+        @Transactional
+        public void deleteDraftTeam(long teamId) {
+            DraftTeam draftTeam = draftTeamRepository.getDraftTeamsById(teamId);
+            if(draftTeam == null) {
+                throw new TeamNotFoundException("Team not found");
+            }
+            List<PlayerTeam> playerTeams = draftTeam.getPlayerTeams();
+            for (PlayerTeam playerTeam : playerTeams) {
+                Player player = playerTeam.getPlayer();
+                player.removePlayerTeam(playerTeam);
+            }
+            draftTeamRepository.delete(draftTeam);
+        }
 }
 
