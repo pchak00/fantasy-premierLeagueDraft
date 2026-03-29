@@ -1,6 +1,7 @@
 package com.pl.prem_league_data.Entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -10,7 +11,10 @@ public class DraftTeam {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank(message = "Team name cannot be blank")
+    @Size(max = 20, message = "Team name cannot exceed 20 characters")
     private String name;
+    @PositiveOrZero
     private BigDecimal budget;
 
     public DraftTeam(Long id, String name, BigDecimal budget) {

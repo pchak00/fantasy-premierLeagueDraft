@@ -1,14 +1,20 @@
 package com.pl.prem_league_data.DTO;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PositiveOrZero;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DraftTeamSummaryDto {
     private Long id;
+    @NotBlank
     private String name;
+    @PositiveOrZero
     private BigDecimal budget;
     private List<PlayerSummaryDto> players = new ArrayList<>();
+    @PositiveOrZero
     private int totalPlayers;
 
     public void addPlayerDto(PlayerSummaryDto player) {

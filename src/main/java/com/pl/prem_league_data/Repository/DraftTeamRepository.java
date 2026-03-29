@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface DraftTeamRepository extends JpaRepository<DraftTeam, Long> {
-    @Query("Select dt from DraftTeam dt left join fetch dt.playerTeams pt left join fetch pt.player")
+    @Query("Select distinct dt from DraftTeam dt left join fetch dt.playerTeams pt left join fetch pt.player")
     List<DraftTeam> getDraftTeams();
-    @Query("Select dt from DraftTeam dt left join fetch dt.playerTeams pt left join fetch pt.player where dt.id = :id")
+    @Query("Select distinct dt from DraftTeam dt left join fetch dt.playerTeams pt left join fetch pt.player where dt.id = :id")
     DraftTeam getDraftTeamsById(Long id);
 }

@@ -1,9 +1,11 @@
 package com.pl.prem_league_data.DTO;
 
 import com.pl.prem_league_data.Entity.Position;
+import jakarta.validation.constraints.NotBlank;
 
 public class PlayerSummaryDto {
     private Long id;
+    @NotBlank
     private String name;
     private Position position;
 

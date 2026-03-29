@@ -1,6 +1,9 @@
 package com.pl.prem_league_data.Entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -21,19 +24,25 @@ public class Player {
     private Long id;
     //--------------- Personal Info ---------------
     @Column(nullable = false)
+    @NotBlank
     private String name;
     @Enumerated(EnumType.STRING) // stores enum as string for readability and flexibility
     @Column(nullable = false)
     private Position position;
 
     // -------------- Stats --------------
+    @PositiveOrZero
     private Integer minutes;
+    @PositiveOrZero
     private Integer goals;
+    @PositiveOrZero
     private Integer assists;
+    @PositiveOrZero
     private Integer totalPoints;
 
     // -------------- Performance Metrics -----------
     @Column(precision = 5, scale = 2)
+    @PositiveOrZero
     private BigDecimal price;
 
     public Player() {
