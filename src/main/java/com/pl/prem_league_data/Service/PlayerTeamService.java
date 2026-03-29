@@ -10,10 +10,11 @@ import com.pl.prem_league_data.Repository.DraftTeamRepository;
 import com.pl.prem_league_data.Repository.PlayerRepository;
 import com.pl.prem_league_data.Repository.PlayerTeamRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
-
+@Service
 public class PlayerTeamService {
     private PlayerRepository playerRepository;
     private DraftTeamRepository draftTeamRepository;
@@ -92,5 +93,11 @@ public class PlayerTeamService {
             draftTeamSummaryDto.addPlayerDto(playerSummaryDto);
         }
         return draftTeamSummaryDto;
+    }
+    public void createDraftTeam(String name) {
+        DraftTeam draftTeam = new DraftTeam();
+        draftTeam.setName(name);
+        draftTeam.setBudget(new BigDecimal("100.00"));
+        draftTeamRepository.save(draftTeam);
     }
 }
