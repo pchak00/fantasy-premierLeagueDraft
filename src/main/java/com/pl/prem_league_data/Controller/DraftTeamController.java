@@ -1,11 +1,12 @@
 package com.pl.prem_league_data.Controller;
 
 import com.pl.prem_league_data.DTO.DraftTeamSummaryDto;
-import com.pl.prem_league_data.Entity.PlayerTeam;
+import com.pl.prem_league_data.DTO.IdRequestDto;
+import com.pl.prem_league_data.DTO.TeamNameRequestDto;
 import com.pl.prem_league_data.Service.PlayerTeamService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import java.util.List;
 
 @RestController
 public class DraftTeamController {
@@ -16,23 +17,27 @@ public class DraftTeamController {
     }
 
     @PostMapping("/draft-teams/create")
-    public void createDraftTeam(@RequestBody Map<String, String> body) {
-        String teamName = body.get("teamName");
+    public void createDraftTeam(@RequestBody TeamNameRequestDto teamNameRequestDto) {
+        String teamName = teamNameRequestDto.getTeamName();
         playerTeamService.createDraftTeam(teamName);
     }
 
-    @GetMapping("/draft-team/{id}")
+    @GetMapping("/draft-teams/{id}")
     public DraftTeamSummaryDto getDraftTeamById(@PathVariable Long id) {
         return playerTeamService.getDraftTeamByTeamId(id);
     }
-    @PutMapping("/draft-team/add/{teamId}")
-    public void addPlayerToDraftTeam(@RequestBody Map<String, String> body, @PathVariable Long teamId) {
-         Long playerId = Long.parseLong(body.get("playerId"));
+    @PutMapping("/draft-teams/add/{teamId}")
+    public void addPlayerToDraftTeam(@RequestBody IdRequestDto idRequestDto, @PathVariable Long teamId) {
+         Long playerId = idRequestDto.getId();
         playerTeamService.addPlayerToDraftTeam(playerId, teamId);
     }
-    @PutMapping("/draft-team/remove/{teamId}")
-    public void removePlayerFromDraftTeam(@RequestBody Map<String, String> body, @PathVariable Long teamId) {
-        Long playerId = Long.parseLong(body.get("playerId"));
+    @PutMapping("/draft-teams/remove/{teamId}")
+    public void removePlayerFromDraftTeam(@RequestBody IdRequestDto idRequestDto, @PathVariable Long teamId) {
+        Long playerId = idRequestDto.getId();
          playerTeamService.removePlayer(playerId, teamId);
+     }
+     @GetMapping("/draft-teams")
+        public List<DraftTeamSummaryDto> getDraftTeams() {
+        return playerTeamService.getDraftTeams();
      }
 }

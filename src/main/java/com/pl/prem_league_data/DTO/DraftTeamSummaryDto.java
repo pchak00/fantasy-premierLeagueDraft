@@ -69,7 +69,7 @@ public class DraftTeamSummaryDto {
         this.totalPlayers = totalPlayers;
     }
 
-    public DraftTeamSummaryDto(Long id, String name, BigDecimal budget, List<PlayerSummaryDto> players, int totalPlayers) {
+    public DraftTeamSummaryDto(Long id, String name, BigDecimal budget) {
         this.id = id;
         this.name = name;
         this.budget = budget;

@@ -13,6 +13,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 @Service
 public class PlayerTeamService {
@@ -100,4 +101,23 @@ public class PlayerTeamService {
         draftTeam.setBudget(new BigDecimal("100.00"));
         draftTeamRepository.save(draftTeam);
     }
+    public List<DraftTeamSummaryDto> getDraftTeams() {
+        List<DraftTeamSummaryDto> draftTeamsSummary = new ArrayList<>();
+        List<DraftTeam> draftTeams = draftTeamRepository.getDraftTeams();
+        for(DraftTeam draftTeam : draftTeams) {
+            DraftTeamSummaryDto draftTeamSummaryDto = new DraftTeamSummaryDto();
+            draftTeamSummaryDto.setId(draftTeam.getId());
+            draftTeamSummaryDto.setName(draftTeam.getName());
+            draftTeamSummaryDto.setBudget(draftTeam.getBudget());
+            draftTeamSummaryDto.setTotalPlayers(draftTeam.getPlayerTeams().size());
+            for (PlayerTeam playerTeam : draftTeam.getPlayerTeams()) {
+                Player player = playerTeam.getPlayer();
+                PlayerSummaryDto playerSummaryDto = new PlayerSummaryDto(player.getId(), player.getName(), player.getPosition());
+                draftTeamSummaryDto.addPlayerDto(playerSummaryDto);
+            }
+            draftTeamsSummary.add(draftTeamSummaryDto);
+        }
+        return draftTeamsSummary;
+        }
 }
+
